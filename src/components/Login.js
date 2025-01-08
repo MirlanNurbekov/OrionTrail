@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/Login.css';
 
 export default function Login({ onLogin }) {
     const [username, setUsername] = useState('');
@@ -21,9 +22,9 @@ export default function Login({ onLogin }) {
     };
 
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleLogin}>
+        <div className="login-container">
+            <form className="login-form" onSubmit={handleLogin}>
+                <h1>Login</h1>
                 <input
                     type="text"
                     placeholder="Username"
@@ -37,8 +38,8 @@ export default function Login({ onLogin }) {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button type="submit">Login</button>
+                {error && <p className="error-message">{error}</p>}
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
     );
 }

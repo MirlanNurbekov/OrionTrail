@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/QuestionPage.css';
 
 export default function QuestionPage({ language }) {
     const [level, setLevel] = useState(1);
@@ -15,23 +16,23 @@ export default function QuestionPage({ language }) {
     }, [language, level]);
 
     return (
-        <div>
+        <div className="question-page">
             <h1>{language} Questions - Level {level}</h1>
-            <nav>
+            <nav className="navbar">
                 {[1, 2, 3, 4].map((lvl) => (
                     <button key={lvl} onClick={() => setLevel(lvl)}>
                         Level {lvl}
                     </button>
                 ))}
             </nav>
-            <ul>
+            <div className="question-list">
                 {questions.map((q, index) => (
-                    <li key={index}>
+                    <div key={index} className="question-item">
                         {q}
-                        {solutionsVisible && <p>Solution: Solution for {q}</p>}
-                    </li>
+                        {solutionsVisible && <p className="solution">Solution: Solution for {q}</p>}
+                    </div>
                 ))}
-            </ul>
+            </div>
             <button onClick={() => setSolutionsVisible(!solutionsVisible)}>
                 {solutionsVisible ? 'Hide Solutions' : 'Show Solutions'}
             </button>

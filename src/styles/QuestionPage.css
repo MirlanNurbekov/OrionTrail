@@ -1,0 +1,34 @@
+.question-page {
+  padding: 20px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.navbar button {
+  margin: 0 10px;
+}
+
+.question-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.question-item {
+  width: 80%;
+  max-width: 600px;
+  background: #2a2a3b;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.solution {
+  margin-top: 10px;
+  color: #4a90e2;
+}
