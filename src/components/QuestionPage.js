@@ -1,41 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../styles/QuestionPage.css';
+import { PythonQuestions } from './PythonQuestions';
+import { PythonAnswers } from './PythonAnswers';
+import { JavaScriptQuestions } from './JavaScriptQuestions';
+import { JavaScriptAnswers } from './JavaScriptAnswers';
 
 export default function QuestionPage({ language }) {
-    const [level, setLevel] = useState(1);
-    const [questions, setQuestions] = useState([]);
-    const [solutionsVisible, setSolutionsVisible] = useState(false);
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [showSolution, setShowSolution] = useState(false);
 
-    useEffect(() => {
-        const fetchQuestions = async () => {
-            const response = await fetch('/api/questions');
-            const data = await response.json();
-            setQuestions(data[language][level - 1]?.questions || []);
-        };
-        fetchQuestions();
-    }, [language, level]);
+    const questions = language === 'Python' ? PythonQuestions : JavaScriptQuestions;
+    const answers = language === 'Python' ? PythonAnswers : JavaScriptAnswers;
 
     return (
         <div className="question-page">
-            <h1>{language} Questions - Level {level}</h1>
-            <nav className="navbar">
-                {[1, 2, 3, 4].map((lvl) => (
-                    <button key={lvl} onClick={() => setLevel(lvl)}>
-                        Level {lvl}
-                    </button>
+            <h1>{language} Questions</h1>
+            <ul className="question-list">
+                {questions.map((question) => (
+                    <li key={question.id} className="question-item">
+                        <div
+                            className="question-header"
+                            onClick={() =>
+                                setSelectedQuestion(
+                                    selectedQuestion === question.id ? null : question.id
+                                )
+                            }
+                        >
+                            Question {question.id}
+                        </div>
+                        {selectedQuestion === question.id && (
+                            <div className="question-content">
+                                <p>{question.description}</p>
+                                <button
+                                    onClick={() => setShowSolution(!showSolution)}
+                                    className="show-solution-btn"
+                                >
+                                    {showSolution ? 'HIDE SOLUTION' : 'SHOW SOLUTION'}
+                                </button>
+                                {showSolution && (
+                                    <pre className="solution">{answers.find((ans) => ans.id === question.id)?.solution}</pre>
+                                )}
+                            </div>
+                        )}
+                    </li>
                 ))}
-            </nav>
-            <div className="question-list">
-                {questions.map((q, index) => (
-                    <div key={index} className="question-item">
-                        {q}
-                        {solutionsVisible && <p className="solution">Solution: Solution for {q}</p>}
-                    </div>
-                ))}
-            </div>
-            <button onClick={() => setSolutionsVisible(!solutionsVisible)}>
-                {solutionsVisible ? 'Hide Solutions' : 'Show Solutions'}
-            </button>
+            </ul>
         </div>
     );
 }
