@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '../styles/Login.css';
-import logo from '../Pictures/su_logo.png';
 
 export default function Login({ onLogin }) {
     const [username, setUsername] = useState('');
@@ -18,7 +17,7 @@ export default function Login({ onLogin }) {
     return (
         <div className="input-wrapper">
             <form>
-                <img src={logo} alt="Logo" className="logo" />
+                <img src="/Pictures/su_logo.png" alt="Logo" className="logo" />
                 <input
                     type="text"
                     name="username"

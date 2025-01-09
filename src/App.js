@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import Login from './components/Login';
 import LanguageSelector from './components/LanguageSelector';
 import QuestionPage from './components/QuestionPage';
-import './styles/App.css';
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [language, setLanguage] = useState('');
+
+    const handleLogout = () => {
+        setLoggedIn(false);
+        setLanguage('');
+    };
 
     if (!loggedIn) {
         return <Login onLogin={() => setLoggedIn(true)} />;
@@ -16,7 +20,12 @@ function App() {
         return <LanguageSelector onSelectLanguage={(lang) => setLanguage(lang)} />;
     }
 
-    return <QuestionPage language={language} />;
+    return (
+        <QuestionPage
+            language={language}
+            onBackToLanguages={() => setLanguage('')}
+        />
+    );
 }
 
 export default App;

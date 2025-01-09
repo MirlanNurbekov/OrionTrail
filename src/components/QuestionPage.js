@@ -1,50 +1,54 @@
 import React, { useState } from 'react';
-import '../styles/QuestionPage.css';
+import Navbar from './Navbar';
 import { PythonQuestions } from './PythonQuestions';
 import { PythonAnswers } from './PythonAnswers';
 import { JavaScriptQuestions } from './JavaScriptQuestions';
 import { JavaScriptAnswers } from './JavaScriptAnswers';
+import '../styles/QuestionPage.css';
 
-export default function QuestionPage({ language }) {
-    const [selectedQuestion, setSelectedQuestion] = useState(null);
-    const [showSolution, setShowSolution] = useState(false);
+export default function QuestionPage({ language, onBackToLanguages }) {
+    const levels = [1, 2, 3, 4];
+    const [selectedLevel, setSelectedLevel] = useState(1);
+    const [showSolution, setShowSolution] = useState(null);
 
-    const questions = language === 'Python' ? PythonQuestions : JavaScriptQuestions;
-    const answers = language === 'Python' ? PythonAnswers : JavaScriptAnswers;
+    const questions =
+        language === 'Python'
+            ? PythonQuestions[selectedLevel - 1]
+            : JavaScriptQuestions[selectedLevel - 1];
+
+    const answers =
+        language === 'Python'
+            ? PythonAnswers[selectedLevel - 1]
+            : JavaScriptAnswers[selectedLevel - 1];
 
     return (
         <div className="question-page">
-            <h1>{language} Questions</h1>
-            <ul className="question-list">
-                {questions.map((question) => (
-                    <li key={question.id} className="question-item">
-                        <div
-                            className="question-header"
+            <Navbar
+                levels={levels}
+                selectedLevel={selectedLevel}
+                onSelectLevel={(level) => {
+                    setSelectedLevel(level);
+                    setShowSolution(null);
+                }}
+                onBack={onBackToLanguages}
+            />
+            <div className="questions">
+                {questions.map((question, index) => (
+                    <div key={index} className="question-item">
+                        <p>{question}</p>
+                        <button
                             onClick={() =>
-                                setSelectedQuestion(
-                                    selectedQuestion === question.id ? null : question.id
-                                )
+                                setShowSolution(showSolution === index ? null : index)
                             }
                         >
-                            Question {question.id}
-                        </div>
-                        {selectedQuestion === question.id && (
-                            <div className="question-content">
-                                <p>{question.description}</p>
-                                <button
-                                    onClick={() => setShowSolution(!showSolution)}
-                                    className="show-solution-btn"
-                                >
-                                    {showSolution ? 'HIDE SOLUTION' : 'SHOW SOLUTION'}
-                                </button>
-                                {showSolution && (
-                                    <pre className="solution">{answers.find((ans) => ans.id === question.id)?.solution}</pre>
-                                )}
-                            </div>
+                            {showSolution === index ? 'Hide Solution' : 'Show Solution'}
+                        </button>
+                        {showSolution === index && (
+                            <pre className="solution">{answers[index]}</pre>
                         )}
-                    </li>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }

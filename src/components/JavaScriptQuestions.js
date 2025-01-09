@@ -1,6 +1,22 @@
 export const JavaScriptQuestions = [
-  { id: 1, description: "Write a JavaScript program to check if a number is even or odd." },
-  { id: 2, description: "Write a JavaScript program to find the largest number among three given numbers." },
-  { id: 3, description: "Write a JavaScript program to reverse a string." },
-  // Add more questions as needed
+  [
+      'JavaScript Level 1 Question 1',
+      'JavaScript Level 1 Question 2',
+      'JavaScript Level 1 Question 3',
+  ],
+  [
+      'JavaScript Level 2 Question 1',
+      'JavaScript Level 2 Question 2',
+      'JavaScript Level 2 Question 3',
+  ],
+  [
+      'JavaScript Level 3 Question 1',
+      'JavaScript Level 3 Question 2',
+      'JavaScript Level 3 Question 3',
+  ],
+  [
+      'JavaScript Level 4 Question 1',
+      'JavaScript Level 4 Question 2',
+      'JavaScript Level 4 Question 3',
+  ],
 ];
