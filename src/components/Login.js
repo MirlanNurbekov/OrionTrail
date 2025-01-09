@@ -1,44 +1,46 @@
 import React, { useState } from 'react';
 import '../styles/Login.css';
+import logo from '../Pictures/su_logo.png';
 
 export default function Login({ onLogin }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-        });
-        const data = await response.json();
-        if (data.success) {
+    const handleLogin = () => {
+        if (username === 'student' && password === 'supassword') {
             onLogin();
         } else {
-            setError(data.message);
+            setError('Invalid credentials. Please try again.');
         }
     };
 
     return (
-        <div className="login-container">
-            <form className="login-form" onSubmit={handleLogin}>
-                <h1>Login</h1>
+        <div className="input-wrapper">
+            <form>
+                <img src={logo} alt="Logo" className="logo" />
                 <input
                     type="text"
+                    name="username"
+                    className="username"
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    required
                 />
                 <input
                     type="password"
+                    name="password"
+                    className="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
-                <button type="submit">Login</button>
-                {error && <p className="error-message">{error}</p>}
+                <button type="button" className="send" onClick={handleLogin}>
+                    Login
+                </button>
+                {error && <p className="error">{error}</p>}
             </form>
         </div>
     );
