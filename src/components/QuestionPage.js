@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { PythonQuestions } from './PythonQuestions';
 import { PythonAnswers } from './PythonAnswers';
@@ -11,10 +11,21 @@ export default function QuestionPage({ language, onBackToLanguages }) {
     const [points, setPoints] = useState(0);
     const [userAnswer, setUserAnswer] = useState('');
     const [feedback, setFeedback] = useState('');
-    const [showSolution, setShowSolution] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const [answeredQuestions, setAnsweredQuestions] = useState({}); // Tracks answered questions across all levels
 
     const questions = PythonQuestions[selectedLevel - 1];
     const solutions = PythonAnswers[selectedLevel - 1];
+
+    // Initialize the answeredQuestions state for all levels
+    useEffect(() => {
+        const initialAnsweredQuestions = {};
+        levels.forEach((level) => {
+            initialAnsweredQuestions[level] = {};
+        });
+        setAnsweredQuestions((prev) => ({ ...initialAnsweredQuestions, ...prev }));
+    }, []);
 
     const handleLevelSelect = (level) => {
         if (level === 4 && points < 200) return; // Prevent access to Level 4 if points < 200
@@ -22,17 +33,32 @@ export default function QuestionPage({ language, onBackToLanguages }) {
         setActiveQuestion(null);
         setUserAnswer('');
         setFeedback('');
-        setShowSolution(false);
+        setShowModal(false);
     };
 
-    const handleSubmit = (correctAnswer) => {
+    const handleSubmit = (questionIndex, correctAnswer) => {
         if (userAnswer.trim() === correctAnswer.trim()) {
-            let earnedPoints = selectedLevel * 10;
+            const earnedPoints = selectedLevel * 10;
             setPoints((prev) => prev + earnedPoints);
             setFeedback(`Correct! You earned ${earnedPoints} points.`);
+
+            setAnsweredQuestions((prev) => ({
+                ...prev,
+                [selectedLevel]: { ...prev[selectedLevel], [questionIndex]: true },
+            }));
         } else {
             setFeedback('Incorrect. Try again!');
         }
+    };
+
+    const handleGiveUp = (solution) => {
+        setModalContent(solution);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setModalContent('');
     };
 
     return (
@@ -71,29 +97,42 @@ export default function QuestionPage({ language, onBackToLanguages }) {
                                 ></textarea>
                                 <div className="buttons">
                                     <button
-                                        className="solution-button"
-                                        onClick={() => setShowSolution(!showSolution)}
+                                        className="give-up-button"
+                                        onClick={() => handleGiveUp(solutions[index])}
                                     >
-                                        {showSolution ? 'Hide Solution' : 'Show Solution'}
+                                        Give Up
                                     </button>
                                     <button
                                         className="submit-button"
-                                        onClick={() => handleSubmit(solutions[index])}
+                                        onClick={() => handleSubmit(index, solutions[index])}
+                                        disabled={answeredQuestions[selectedLevel]?.[index] || false}
                                     >
-                                        Submit
+                                        {answeredQuestions[selectedLevel]?.[index]
+                                            ? 'Answered'
+                                            : 'Submit'}
                                     </button>
                                 </div>
-                                {showSolution && (
-                                    <pre className="solution">
-                                        {solutions[index]}
-                                    </pre>
-                                )}
                                 {feedback && <p className="feedback">{feedback}</p>}
                             </div>
                         )}
                     </div>
                 ))}
             </div>
+            {showModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Solution</h3>
+                        <div className="solution-content">
+                            {modalContent.split('\n').map((line, index) => (
+                                <p key={index}>{line}</p>
+                            ))}
+                        </div>
+                        <button className="close-modal" onClick={closeModal}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
