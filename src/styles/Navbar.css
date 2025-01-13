@@ -23,7 +23,13 @@
   background-color: #357ab8;
 }
 
-.nav-button:hover,
+.nav-button.disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.nav-button:hover:not(.disabled),
 .back-button:hover {
   background-color: #357ab8;
 }

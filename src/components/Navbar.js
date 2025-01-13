@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Navbar.css';
 
-export default function Navbar({ levels, selectedLevel, onSelectLevel, onBack }) {
+export default function Navbar({ levels, selectedLevel, onSelectLevel, onBack, points }) {
     return (
         <nav className="navbar">
             <button className="back-button" onClick={onBack}>
@@ -10,8 +10,11 @@ export default function Navbar({ levels, selectedLevel, onSelectLevel, onBack })
             {levels.map((level) => (
                 <button
                     key={level}
-                    className={`nav-button ${selectedLevel === level ? 'active' : ''}`}
+                    className={`nav-button ${selectedLevel === level ? 'active' : ''} ${
+                        level === 4 && points < 200 ? 'disabled' : ''
+                    }`}
                     onClick={() => onSelectLevel(level)}
+                    disabled={level === 4 && points < 200}
                 >
                     Level {level}
                 </button>
