@@ -134,3 +134,9 @@
 .close-modal:hover {
   background-color: #c0392b;
 }
+
+.question-description {
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.6;
+}
