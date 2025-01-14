@@ -8,6 +8,14 @@ import { PythonQuestionsLvl3 } from "../data/python/PythonQuestionsLvl3";
 import { PythonAnswersLvl3 } from "../data/python/PythonAnswersLvl3";
 import { PythonQuestionsLvl4 } from "../data/python/PythonQuestionsLvl4";
 import { PythonAnswersLvl4 } from "../data/python/PythonAnswersLvl4";
+import { JavaScriptQuestionsLvl1 } from "../data/javascript/JavaScriptQuestionsLvl1";
+import { JavaScriptAnswersLvl1 } from "../data/javascript/JavaScriptAnswersLvl1";
+import { JavaScriptQuestionsLvl2 } from "../data/javascript/JavaScriptQuestionsLvl2";
+import { JavaScriptAnswersLvl2 } from "../data/javascript/JavaScriptAnswersLvl2";
+import { JavaScriptQuestionsLvl3 } from "../data/javascript/JavaScriptQuestionsLvl3";
+import { JavaScriptAnswersLvl3 } from "../data/javascript/JavaScriptAnswersLvl3";
+import { JavaScriptQuestionsLvl4 } from "../data/javascript/JavaScriptQuestionsLvl4";
+import { JavaScriptAnswersLvl4 } from "../data/javascript/JavaScriptAnswersLvl4";
 import "../styles/QuestionPage.css";
 
 export default function QuestionPage({ language, onBackToLanguages }) {
@@ -28,6 +36,12 @@ export default function QuestionPage({ language, onBackToLanguages }) {
       PythonQuestionsLvl3,
       PythonQuestionsLvl4,
     ],
+    JavaScript: [
+      JavaScriptQuestionsLvl1,
+      JavaScriptQuestionsLvl2,
+      JavaScriptQuestionsLvl3,
+      JavaScriptQuestionsLvl4,
+    ],
   };
 
   const answersMap = {
@@ -36,6 +50,12 @@ export default function QuestionPage({ language, onBackToLanguages }) {
       PythonAnswersLvl2,
       PythonAnswersLvl3,
       PythonAnswersLvl4,
+    ],
+    JavaScript: [
+      JavaScriptAnswersLvl1,
+      JavaScriptAnswersLvl2,
+      JavaScriptAnswersLvl3,
+      JavaScriptAnswersLvl4,
     ],
   };
 

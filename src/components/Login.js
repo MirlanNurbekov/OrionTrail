@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Login.css";
 
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [randomPositions, setRandomPositions] = useState([]);
+
+  useEffect(() => {
+    const generateRandomPositions = () =>
+      Array.from({ length: 12 }, () => ({
+        top: `${Math.random() * 100}vh`,
+        left: `${Math.random() * 100}vw`,
+      }));
+    setRandomPositions(generateRandomPositions());
+  }, []); // Run only once when the component mounts
 
   const handleLogin = () => {
     if (username === "student" && password === "supassword") {
@@ -14,19 +24,17 @@ export default function Login({ onLogin }) {
     }
   };
 
-  const generateRandomPosition = () => ({
-    top: `${Math.random() * 100}vh`,
-    left: `${Math.random() * 100}vw`,
-  });
-
   return (
     <div className="login-page">
       <div className="moving-elements">
-        {[...Array(12)].map((_, index) => (
+        {randomPositions.map((position, index) => (
           <div
             key={index}
             className="circle"
-            style={generateRandomPosition()}
+            style={{
+              top: position.top,
+              left: position.left,
+            }}
           ></div>
         ))}
       </div>

@@ -23,8 +23,26 @@ export default function LanguageSelector({ onSelectLanguage }) {
             </div>
             <h1>Select Language</h1>
             <div className="language-buttons">
-                <button onClick={() => onSelectLanguage('Python')}>Python</button>
-                <button onClick={() => onSelectLanguage('JavaScript')}>JavaScript</button>
+                <div
+                    className="language-icon"
+                    onClick={() => onSelectLanguage('Python')}
+                >
+                    <img
+                        src="/Pictures/pythonlogo.png"
+                        alt="Python"
+                        className="language-image"
+                    />
+                </div>
+                <div
+                    className="language-icon"
+                    onClick={() => onSelectLanguage('JavaScript')}
+                >
+                    <img
+                        src="/Pictures/jslogo.png"
+                        alt="JavaScript"
+                        className="language-image"
+                    />
+                </div>
             </div>
         </div>
     );
