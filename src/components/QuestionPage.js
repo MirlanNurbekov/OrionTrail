@@ -119,6 +119,7 @@ export default function QuestionPage({ language, onBackToLanguages }) {
         onBack={onBackToLanguages}
         points={points}
       />
+      <div className="spacer" style={{ height: "20px" }}></div> {/* Add space below the navbar */}
       <div className="questions">
         {questions.map((question, index) => (
           <div key={index} className="question-item">
