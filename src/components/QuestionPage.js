@@ -138,7 +138,10 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
             </div>
             {activeQuestion === index && (
               <div className="question-content">
-                <div className="question-description">
+                <div
+                  className="question-description"
+                  style={{ userSelect: "none" }}
+                >
                   <p>{question.description}</p>
                   <div className="incorrect-code">
                     <pre>{question.incorrectCode}</pre>
