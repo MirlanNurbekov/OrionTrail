@@ -70,7 +70,8 @@ export default function QuestionPage({ language, onBackToLanguages }) {
     setAnsweredQuestions((prev) => ({ ...initialAnsweredQuestions, ...prev }));
   }, []);
 
-  const normalizeCode = (code) => code.replace(/\s+/g, " ").trim();
+  const normalizeCode = (code) => 
+    code.replace(/\"/g, "'").replace(/\s+/g, "").replace(/\n/g, "");
 
   const handleLevelSelect = (level) => {
     if (level === 4 && points < 200) return;
@@ -79,6 +80,12 @@ export default function QuestionPage({ language, onBackToLanguages }) {
     setUserAnswer("");
     setFeedback("");
     setShowModal(false);
+  };
+
+  const handleQuestionSelect = (index) => {
+    setActiveQuestion(activeQuestion === index ? null : index);
+    setUserAnswer("");
+    setFeedback("");
   };
 
   const handleSubmit = (questionIndex, correctAnswers) => {
@@ -125,11 +132,7 @@ export default function QuestionPage({ language, onBackToLanguages }) {
           <div key={index} className="question-item">
             <div
               className="question-header"
-              onClick={() =>
-                setActiveQuestion(
-                  activeQuestion === index ? null : index
-                )
-              }
+              onClick={() => handleQuestionSelect(index)}
             >
               Question {index + 1}
             </div>
@@ -149,6 +152,7 @@ export default function QuestionPage({ language, onBackToLanguages }) {
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
                   placeholder="Type your answer here..."
+                  style={{ resize: "none" }}
                 ></textarea>
                 <div className="buttons">
                   <button
