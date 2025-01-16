@@ -18,7 +18,7 @@ import { JavaScriptQuestionsLvl4 } from "../data/javascript/JavaScriptQuestionsL
 import { JavaScriptAnswersLvl4 } from "../data/javascript/JavaScriptAnswersLvl4";
 import "../styles/QuestionPage.css";
 
-export default function QuestionPage({ language, onBackToLanguages }) {
+export default function QuestionPage({ language = "Python", onBackToLanguages }) {
   const levels = [1, 2, 3, 4];
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [activeQuestion, setActiveQuestion] = useState(null);
@@ -59,8 +59,8 @@ export default function QuestionPage({ language, onBackToLanguages }) {
     ],
   };
 
-  const questions = questionsMap[language][selectedLevel - 1];
-  const solutions = answersMap[language][selectedLevel - 1];
+  const questions = questionsMap?.[language]?.[selectedLevel - 1] || [];
+  const solutions = answersMap?.[language]?.[selectedLevel - 1] || [];
 
   useEffect(() => {
     const initialAnsweredQuestions = {};
@@ -70,7 +70,7 @@ export default function QuestionPage({ language, onBackToLanguages }) {
     setAnsweredQuestions((prev) => ({ ...initialAnsweredQuestions, ...prev }));
   }, []);
 
-  const normalizeCode = (code) => 
+  const normalizeCode = (code) =>
     code.replace(/\"/g, "'").replace(/\s+/g, "").replace(/\n/g, "");
 
   const handleLevelSelect = (level) => {
@@ -126,7 +126,7 @@ export default function QuestionPage({ language, onBackToLanguages }) {
         onBack={onBackToLanguages}
         points={points}
       />
-      <div className="spacer" style={{ height: "20px" }}></div> {/* Add space below the navbar */}
+      <div className="spacer" style={{ height: "20px" }}></div> {/* Space below the navbar */}
       <div className="questions">
         {questions.map((question, index) => (
           <div key={index} className="question-item">
@@ -138,14 +138,11 @@ export default function QuestionPage({ language, onBackToLanguages }) {
             </div>
             {activeQuestion === index && (
               <div className="question-content">
-                <div className="question-description" style={{ userSelect: "none" }}>
-                  {question.description.split("Expected result:").map((part, idx) => (
-                    <p key={idx}>
-                      {idx === 0
-                        ? part.trim()
-                        : `Expected result:\n${part.trim()}`}
-                    </p>
-                  ))}
+                <div className="question-description">
+                  <p>{question.description}</p>
+                  <div className="incorrect-code">
+                    <pre>{question.incorrectCode}</pre>
+                  </div>
                 </div>
                 <textarea
                   className="user-input"

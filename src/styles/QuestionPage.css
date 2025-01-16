@@ -140,3 +140,13 @@
   font-size: 16px;
   line-height: 1.6;
 }
+.incorrect-code {
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  font-family: "Courier New", Courier, monospace;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin-top: 10px;
+}
