@@ -117,6 +117,10 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
     setModalContent("");
   };
 
+  const preventCopyPaste = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="question-page">
       <Navbar
@@ -142,7 +146,12 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
                   className="question-description"
                   style={{ userSelect: "none" }}
                 >
-                  <p>{question.description}</p>
+                  <p>{question.description.split("Expected result:")[0]}</p>
+                  <p>
+                    <strong>Expected result:</strong>
+                    <br />
+                    {question.description.split("Expected result:")[1]}
+                  </p>
                   <div className="incorrect-code">
                     <pre>{question.incorrectCode}</pre>
                   </div>
@@ -153,6 +162,8 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
                   onChange={(e) => setUserAnswer(e.target.value)}
                   placeholder="Type your answer here..."
                   style={{ resize: "none" }}
+                  onPaste={preventCopyPaste}
+                  onCopy={preventCopyPaste}
                 ></textarea>
                 <div className="buttons">
                   <button
