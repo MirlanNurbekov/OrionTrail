@@ -8,14 +8,6 @@ import { PythonQuestionsLvl3 } from "../data/python/PythonQuestionsLvl3";
 import { PythonAnswersLvl3 } from "../data/python/PythonAnswersLvl3";
 import { PythonQuestionsLvl4 } from "../data/python/PythonQuestionsLvl4";
 import { PythonAnswersLvl4 } from "../data/python/PythonAnswersLvl4";
-import { JavaScriptQuestionsLvl1 } from "../data/javascript/JavaScriptQuestionsLvl1";
-import { JavaScriptAnswersLvl1 } from "../data/javascript/JavaScriptAnswersLvl1";
-import { JavaScriptQuestionsLvl2 } from "../data/javascript/JavaScriptQuestionsLvl2";
-import { JavaScriptAnswersLvl2 } from "../data/javascript/JavaScriptAnswersLvl2";
-import { JavaScriptQuestionsLvl3 } from "../data/javascript/JavaScriptQuestionsLvl3";
-import { JavaScriptAnswersLvl3 } from "../data/javascript/JavaScriptAnswersLvl3";
-import { JavaScriptQuestionsLvl4 } from "../data/javascript/JavaScriptQuestionsLvl4";
-import { JavaScriptAnswersLvl4 } from "../data/javascript/JavaScriptAnswersLvl4";
 import "../styles/QuestionPage.css";
 
 export default function QuestionPage({ language = "Python", onBackToLanguages }) {
@@ -36,12 +28,6 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
       PythonQuestionsLvl3,
       PythonQuestionsLvl4,
     ],
-    JavaScript: [
-      JavaScriptQuestionsLvl1,
-      JavaScriptQuestionsLvl2,
-      JavaScriptQuestionsLvl3,
-      JavaScriptQuestionsLvl4,
-    ],
   };
 
   const answersMap = {
@@ -50,12 +36,6 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
       PythonAnswersLvl2,
       PythonAnswersLvl3,
       PythonAnswersLvl4,
-    ],
-    JavaScript: [
-      JavaScriptAnswersLvl1,
-      JavaScriptAnswersLvl2,
-      JavaScriptAnswersLvl3,
-      JavaScriptAnswersLvl4,
     ],
   };
 
@@ -71,7 +51,7 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
   }, []);
 
   const normalizeCode = (code) =>
-    code.replace(/\"/g, "'").replace(/\s+/g, "").replace(/\n/g, "");
+    code.replace(/"/g, "'").replace(/\s+/g, "").replace(/\n/g, "");
 
   const handleLevelSelect = (level) => {
     if (level === 4 && points < 200) return;
@@ -95,21 +75,17 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
     );
 
     if (isCorrect) {
-      const earnedPoints = selectedLevel * 10;
+      const earnedPoints = selectedLevel === 4 ? 100 : selectedLevel * 10;
       setPoints((prev) => prev + earnedPoints);
       setFeedback(`Correct! You earned ${earnedPoints} points.`);
-      setAnsweredQuestions((prev) => ({
-        ...prev,
-        [selectedLevel]: { ...prev[selectedLevel], [questionIndex]: true },
-      }));
     } else {
       setFeedback("Incorrect. Try again!");
     }
-  };
 
-  const handleGiveUp = (solution) => {
-    setModalContent(solution[0]);
-    setShowModal(true);
+    setAnsweredQuestions((prev) => ({
+      ...prev,
+      [selectedLevel]: { ...prev[selectedLevel], [questionIndex]: true },
+    }));
   };
 
   const closeModal = () => {
@@ -130,7 +106,7 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
         onBack={onBackToLanguages}
         points={points}
       />
-      <div className="spacer" style={{ height: "20px" }}></div> {/* Space below the navbar */}
+      <div className="spacer" style={{ height: "20px" }}></div>
       <div className="questions">
         {questions.map((question, index) => (
           <div key={index} className="question-item">
@@ -164,20 +140,24 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
                   style={{ resize: "none" }}
                   onPaste={preventCopyPaste}
                   onCopy={preventCopyPaste}
+                  disabled={answeredQuestions[selectedLevel]?.[index]}
                 ></textarea>
                 <div className="buttons">
-                  <button
-                    className="give-up-button"
-                    onClick={() => handleGiveUp(solutions[index])}
-                  >
-                    Give Up
-                  </button>
+                  {selectedLevel !== 4 && (
+                    <button
+                      className="give-up-button"
+                      onClick={() => {
+                        setModalContent(solutions[index][0]);
+                        setShowModal(true);
+                      }}
+                    >
+                      Give Up
+                    </button>
+                  )}
                   <button
                     className="submit-button"
                     onClick={() => handleSubmit(index, solutions[index])}
-                    disabled={
-                      answeredQuestions[selectedLevel]?.[index] || false
-                    }
+                    disabled={answeredQuestions[selectedLevel]?.[index]}
                   >
                     {answeredQuestions[selectedLevel]?.[index]
                       ? "Answered"

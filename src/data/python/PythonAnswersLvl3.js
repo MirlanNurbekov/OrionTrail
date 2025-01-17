@@ -1,32 +1,32 @@
 export const PythonAnswersLvl3 = [
   [
-    "start, end = 10, 50\nprimes = []\nfor num in range(start, end + 1):\n    if num > 1:\n        for i in range(2, int(num**0.5) + 1):\n            if num % i == 0:\n                break\n        else:\n            primes.append(num)\nprint(primes)"
+    "matrix1 = [[1, 2], [3, 4]]\nmatrix2 = [[5, 6], [7, 8]]\nresult = [[matrix1[i][j] + matrix2[i][j] for j in range(len(matrix1[0]))] for i in range(len(matrix1))]\nprint(result)"
   ],
   [
-    "list1 = [5, 12, 18, 25, 30]\nlist2 = [18, 25, 30, 35]\ncommon = sorted(set(list1) & set(list2))\nprint(common)"
+    "text = 'This is a simple text with some duplicate words, simple words.'\nwords = text.split()\nword_count = {}\nfor word in words:\n    word_count[word] = word_count.get(word, 0) + 1\nmost_common_word = max(word_count, key=word_count.get)\nprint(most_common_word)"
   ],
   [
-    "matrix = [[1, 2, 3], [4, 5, 6]]\ntranspose = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]\nprint(transpose)"
+    "text = 'Hello world! Python programming is fun.'\nword_lengths = {word: len(word) for word in text.split()}\nprint(word_lengths)"
   ],
   [
-    "s = 'swiss'\nfirst_unique = None\nfor char in s:\n    if s.count(char) == 1:\n        first_unique = char\n        break\nprint(first_unique if first_unique else 'None')"
+    "nums = [1, 2, 3, 4, 5]\nk = 3\nrotated = nums[-k:] + nums[:-k]\nprint(rotated)"
   ],
   [
-    "employees = [{'name': 'Alice', 'salary': 3000}, {'name': 'Bob', 'salary': 4000}, {'name': 'Charlie', 'salary': 3500}]\ntotal_salary = sum(emp['salary'] for emp in employees)\nprint(total_salary)"
+    "n = 5\ntriangle = []\nfor i in range(n):\n    triangle.append([1 if j == 0 or j == i else triangle[i-1][j-1] + triangle[i-1][j] for j in range(i + 1)])\nfor row in triangle:\n    print(row)"
   ],
   [
-    "nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]\nevens = [num for num in nums if num % 2 == 0]\nodds = [num for num in nums if num % 2 != 0]\nprint('evens =', evens)\nprint('odds =', odds)"
+    "n = 3\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\ntransposed = [[matrix[j][i] for j in range(n)] for i in range(n)]\nprint(transposed)"
   ],
   [
-    "sentence = 'the quick brown fox jumps over the lazy dog'\nwords = sentence.split()\nword_count = {}\nfor word in words:\n    word_count[word] = word_count.get(word, 0) + 1\nprint(word_count)"
+    "nums = [1, 2, 3, 4, 5]\ntarget = 6\nresult = [(nums[i], nums[j]) for i in range(len(nums)) for j in range(i + 1, len(nums)) if nums[i] + nums[j] == target]\nprint(result)"
   ],
   [
-    "nums = [1, 2, 3, 4, 5]\nsteps = 2\nrotated = nums[steps:] + nums[:steps]\nprint(rotated)"
+    "data = [2, 4, 6, 8]\nresult = [(i, j) for i in data for j in data if i != j and i + j == 10]\nprint(result)"
   ],
   [
-    "from math import gcd\nfrom functools import reduce\nnums = [48, 64, 16]\ngcd_result = reduce(gcd, nums)\nprint(gcd_result)"
+    "words = ['apple', 'banana', 'cherry', 'date', 'elderberry']\nlength_sorted = sorted(words, key=lambda word: len(word), reverse=True)\nprint(length_sorted)"
   ],
   [
-    "nums = [12, 34, 56, 78]\ntotal_sum = sum(sum(int(digit) for digit in str(num)) for num in nums)\nprint(total_sum)"
+    "nums = [5, 7, 2, 8, 10, 9]\nsorted_nums = sorted(nums, reverse=True)\nprint(sorted_nums)"
   ],
 ];
