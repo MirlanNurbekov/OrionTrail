@@ -32,6 +32,9 @@ export default function JSQuestionPage({ language = "JavaScript", onBackToLangua
     setAnsweredQuestions(initialAnsweredQuestions);
   }, [levels]);
 
+  const normalizeCode = (code) =>
+    code.replace(/"/g, "'").replace(/\s+/g, "").replace(/\n/g, "");
+
   const handleLevelSelect = (level) => {
     setSelectedLevel(level);
     setActiveQuestion(null);
@@ -45,19 +48,23 @@ export default function JSQuestionPage({ language = "JavaScript", onBackToLangua
     setFeedback("");
   };
 
-  const handleSubmit = (questionIndex) => {
-    const isCorrect = solutions[selectedLevel - 1][questionIndex].includes(userAnswer.trim());
-    if (isCorrect) {
-      setPoints((prev) => prev + 10);
-      setFeedback("Correct! You earned 10 points.");
-    } else {
-      setFeedback("Incorrect. Try again!");
-    }
+  const handleSubmit = (questionIndex, correctAnswers) => {
+    const normalizedUserAnswer = normalizeCode(userAnswer);
+    const isCorrect = correctAnswers.some(
+      (answer) => normalizeCode(answer) === normalizedUserAnswer
+    );
 
-    setAnsweredQuestions((prev) => ({
-      ...prev,
-      [selectedLevel]: { ...prev[selectedLevel], [questionIndex]: true },
-    }));
+    if (isCorrect) {
+      const earnedPoints = selectedLevel * 10;
+      setPoints((prev) => prev + earnedPoints);
+      setFeedback(`Correct! You earned ${earnedPoints} points.`);
+      setAnsweredQuestions((prev) => ({
+        ...prev,
+        [selectedLevel]: { ...prev[selectedLevel], [questionIndex]: true },
+      }));
+    } else {
+      setFeedback("Incorrect. Please try again.");
+    }
   };
 
   return (
@@ -86,12 +93,13 @@ export default function JSQuestionPage({ language = "JavaScript", onBackToLangua
                   className="user-input"
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
-                  placeholder="Enter your answer..."
+                  placeholder="Enter your code here..."
+                  disabled={answeredQuestions[selectedLevel]?.[index]}
                 ></textarea>
                 <div className="buttons">
                   <button
                     className="submit-button"
-                    onClick={() => handleSubmit(index)}
+                    onClick={() => handleSubmit(index, solutions[index])}
                     disabled={answeredQuestions[selectedLevel]?.[index]}
                   >
                     {answeredQuestions[selectedLevel]?.[index] ? "Answered" : "Submit"}

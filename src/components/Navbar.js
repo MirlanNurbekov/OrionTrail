@@ -7,9 +7,11 @@ export default function Navbar({ levels, selectedLevel, onSelectLevel, onBack, p
 
   return (
     <div className="navbar">
-      <button className="back-button" onClick={onBack}>
-        Back to Languages
-      </button>
+      <div className="navbar-header">
+        <button className="back-button" onClick={onBack}>
+          Back to Languages
+        </button>
+      </div>
       <div className="level-buttons">
         {levels.map((level) => (
           <button
