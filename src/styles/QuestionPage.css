@@ -150,3 +150,36 @@
   white-space: pre-wrap;
   margin-top: 10px;
 }
+
+.show-tip-button,
+.submit-button {
+  padding: 10px 20px;
+  margin: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.show-tip-button:hover,
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.show-tip-button:disabled,
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.tip-section {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #007bff;
+  font-size: 14px;
+  color: #333;
+}

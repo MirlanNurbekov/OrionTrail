@@ -8,6 +8,7 @@ import { PythonQuestionsLvl3 } from "../data/python/PythonQuestionsLvl3";
 import { PythonAnswersLvl3 } from "../data/python/PythonAnswersLvl3";
 import { PythonQuestionsLvl4 } from "../data/python/PythonQuestionsLvl4";
 import { PythonAnswersLvl4 } from "../data/python/PythonAnswersLvl4";
+import { TipsForLvl1 } from "../data/python/TipsForLvl1";
 import "../styles/QuestionPage.css";
 
 export default function QuestionPage({ language = "Python", onBackToLanguages }) {
@@ -20,6 +21,7 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [answeredQuestions, setAnsweredQuestions] = useState({});
+  const [showTip, setShowTip] = useState(false);
 
   const questionsMap = {
     Python: [
@@ -39,8 +41,8 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
     ],
   };
 
-  const questions = questionsMap?.[language]?.[selectedLevel - 1] || [];
-  const solutions = answersMap?.[language]?.[selectedLevel - 1] || [];
+  const questions = questionsMap[language]?.[selectedLevel - 1] || [];
+  const solutions = answersMap[language]?.[selectedLevel - 1] || [];
 
   useEffect(() => {
     const initialAnsweredQuestions = {};
@@ -48,28 +50,29 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
       initialAnsweredQuestions[level] = {};
     });
     setAnsweredQuestions((prev) => ({ ...initialAnsweredQuestions, ...prev }));
-  }, []);
+  }, [levels]);
 
   const normalizeCode = (code) =>
     code.replace(/"/g, "'").replace(/\s+/g, "").replace(/\n/g, "");
 
   const handleLevelSelect = (level) => {
-    if (level === 4 && points < 200) return;
     setSelectedLevel(level);
     setActiveQuestion(null);
     setUserAnswer("");
     setFeedback("");
-    setShowModal(false);
+    setShowTip(false); // Reset tip visibility when switching levels
   };
 
   const handleQuestionSelect = (index) => {
-    setActiveQuestion(activeQuestion === index ? null : index);
+    setActiveQuestion(index);
     setUserAnswer("");
     setFeedback("");
+    setShowTip(false); // Reset tip visibility when selecting a question
   };
 
-  const handleSubmit = (questionIndex, correctAnswers) => {
+  const handleSubmit = (questionIndex) => {
     const normalizedUserAnswer = normalizeCode(userAnswer);
+    const correctAnswers = solutions[questionIndex] || [];
     const isCorrect = correctAnswers.some(
       (answer) => normalizeCode(answer) === normalizedUserAnswer
     );
@@ -79,7 +82,7 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
       setPoints((prev) => prev + earnedPoints);
       setFeedback(`Correct! You earned ${earnedPoints} points.`);
     } else {
-      setFeedback("Incorrect. Try again!");
+      setFeedback("Incorrect. Try again.");
     }
 
     setAnsweredQuestions((prev) => ({
@@ -106,7 +109,6 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
         onBack={onBackToLanguages}
         points={points}
       />
-      <div className="spacer" style={{ height: "20px" }}></div>
       <div className="questions">
         {questions.map((question, index) => (
           <div key={index} className="question-item">
@@ -118,20 +120,21 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
             </div>
             {activeQuestion === index && (
               <div className="question-content">
-                <div
-                  className="question-description"
-                  style={{ userSelect: "none" }}
-                >
-                  <p>{question.description.split("Expected result:")[0]}</p>
-                  <p>
-                    <strong>Expected result:</strong>
-                    <br />
-                    {question.description.split("Expected result:")[1]}
-                  </p>
-                  <div className="incorrect-code">
-                    <pre>{question.incorrectCode}</pre>
+                <p>{question.description}</p>
+                {selectedLevel === 1 && (
+                  <button
+                    onClick={() => setShowTip(true)}
+                    className="show-tip-button"
+                  >
+                    Show Tip
+                  </button>
+                )}
+                {showTip && selectedLevel === 1 && (
+                  <div className="tip-section">
+                    <h4>Tip:</h4>
+                    <p>{TipsForLvl1[index]}</p>
                   </div>
-                </div>
+                )}
                 <textarea
                   className="user-input"
                   value={userAnswer}
@@ -142,29 +145,13 @@ export default function QuestionPage({ language = "Python", onBackToLanguages })
                   onCopy={preventCopyPaste}
                   disabled={answeredQuestions[selectedLevel]?.[index]}
                 ></textarea>
-                <div className="buttons">
-                  {selectedLevel !== 4 && (
-                    <button
-                      className="give-up-button"
-                      onClick={() => {
-                        setModalContent(solutions[index][0]);
-                        setShowModal(true);
-                      }}
-                    >
-                      Give Up
-                    </button>
-                  )}
-                  <button
-                    className="submit-button"
-                    onClick={() => handleSubmit(index, solutions[index])}
-                    disabled={answeredQuestions[selectedLevel]?.[index]}
-                  >
-                    {answeredQuestions[selectedLevel]?.[index]
-                      ? "Answered"
-                      : "Submit"}
-                  </button>
-                </div>
-                {feedback && <p className="feedback">{feedback}</p>}
+                <button
+                  onClick={() => handleSubmit(index)}
+                  disabled={answeredQuestions[selectedLevel]?.[index]}
+                >
+                  Submit
+                </button>
+                {feedback && <p>{feedback}</p>}
               </div>
             )}
           </div>
